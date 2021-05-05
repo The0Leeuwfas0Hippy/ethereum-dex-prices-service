@@ -17,10 +17,13 @@ const { DDEX_TAKER_FEE } = require('./constants')
 // given a token symbol and amount, return offers from all dexes
 // sorted descending by best price
 module.exports = {
-  main(symbol, amount, direction, decimals) {
-    if (direction !== 'BUY' && direction !== 'SELL') {
+  main(symbol, amount, direction, decimals) 
+  {
+    if (direction !== 'BUY' && direction !== 'SELL') 
+    {
       throw new Error(`must specify BUY or SELL. you specified "${direction}"`)
     }
+    
     const dexes = [
       new AirSwap(),
       new Bancor(decimals),

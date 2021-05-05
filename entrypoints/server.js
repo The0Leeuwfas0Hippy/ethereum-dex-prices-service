@@ -17,9 +17,11 @@ app.get('/buy', (req, res) => {
 
   main(symbol.toUpperCase(), parseFloat(amount), 'BUY', decimals || null).then(sortedResponses => {
     console.log(sortedResponses)
-    res.status(200).send(sortedResponses)
+    res.status(200).send(sortedResponses) 
   })
 })
+
+
 app.get('/sell', (req, res) => {
   const { amount, symbol, decimals } = req.query
   if (!amount || !symbol) {

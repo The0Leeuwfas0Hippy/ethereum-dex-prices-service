@@ -44,7 +44,8 @@
     "ethereumjs-tx": "^1.3.7",
     "ethereumjs-util": "^6.0.0",
     "ethers": "^4.0.27",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
+    "http-server": "^0.12.3",
     "human-standard-token-abi": "^2.0.0",
     "js-sha256": "^0.9.0",
     "prettier": "^1.15.3",
@@ -66,5 +67,16 @@
   "resolutions": {
     "*/**/js-yaml": "3.13.1",
     "*/**/handlebars": "^4.0.14"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/The0Leeuwfas0Hippy/ethereum-dex-prices-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/The0Leeuwfas0Hippy/ethereum-dex-prices-service/issues"
+  },
+  "homepage": "https://github.com/The0Leeuwfas0Hippy/ethereum-dex-prices-service#readme"
 }
