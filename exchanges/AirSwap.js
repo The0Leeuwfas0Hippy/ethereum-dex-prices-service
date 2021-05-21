@@ -75,6 +75,6 @@ module.exports = class AirSwap {
       }
     }
 
-    return { [this.name]: result }
+    return result
   }
 }

@@ -49,6 +49,6 @@ module.exports = class Eth2Dai {
         tokenAmount: parseFloat(desiredAmount),
       }
     }
-    return { [this.name]: result }
+    return result 
   }
 }

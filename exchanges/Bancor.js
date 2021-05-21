@@ -158,6 +158,6 @@ module.exports = class Bancor {
         tokenSymbol: symbol,
       }
     }
-    return { [this.name]: result }
+    return result
   }
 }

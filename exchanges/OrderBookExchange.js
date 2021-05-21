@@ -78,7 +78,7 @@ module.exports = class OrderBookExchange {
     if (fee !== 0 && !result.error) {
       result = applyFeeToResult(result, fee, isSell)
     }
-    return { [this.name]: result }
+    return result 
 
     /**
      * Calculate the average and total price if the given amount were to be executed on the orderbook.

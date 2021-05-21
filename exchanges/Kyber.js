@@ -95,6 +95,6 @@ module.exports = class Kyber {
         tokenAmount: parseFloat(desiredAmount),
       }
     }
-    return { [this.name]: result }
+    return result 
   }
 }

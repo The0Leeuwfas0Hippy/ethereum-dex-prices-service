@@ -52,7 +52,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "socket.io-client": "^2.2.0",
-    "web3": "0.17.0-alpha"
+    "web3": "^0.17.0-alpha"
   },
   "devDependencies": {
     "eslint-plugin-jest": "^22.2.2",

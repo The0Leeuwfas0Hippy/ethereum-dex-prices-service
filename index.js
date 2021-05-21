@@ -40,15 +40,28 @@ module.exports = {
       new Switcheo(),
     ]
 
-    const promises = dexes.map(dex =>
+    
+    var Tokens = ["DAI", "USDT"], Sell_Buy = ["SELL", "BUY"], Exch_Pairs = dexes
+
+    const promises = dexes.map(dex =>   
       dex.computePrice(symbol, amount, direction === 'SELL', dex.name === 'DDEX' ? DDEX_TAKER_FEE : 0),
     )
 
-    return Promise.all(promises).then(results => {
-      const sortedResults = direction === 'BUY' ? results.sort(sortAsks) : results.sort(sortBids)
+    for(var i=0; i<promises.length; i++)
+    {
+        for(var x=0; x<promises.length; x++)
+        {
+           
+        }
+    }
 
-      return sortedResults
-    })
+
+    return Promise.all(promises).then(results =>  {
+          const ExchangesAndPrices = results.map(result => [result.exchangeName, result.avgPrice] )
+          
+          return ExchangesAndPrices 
+        })
+    
   },
   AirSwap,
   BambooRelay,

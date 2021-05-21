@@ -1,3 +1,4 @@
+
 const tokenAbi = require('human-standard-token-abi')
 const ethers = require('ethers')
 const { tokenSymbolResolver } = require('../tokenSymbolResolver.js')
@@ -118,6 +119,6 @@ module.exports = class Uniswap {
         tokenAmount: parseFloat(desiredAmount),
       }
     }
-    return { [this.name]: result }
+    return result
   }
 }
