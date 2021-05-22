@@ -47,20 +47,46 @@ module.exports = {
       dex.computePrice(symbol, amount, direction === 'SELL', dex.name === 'DDEX' ? DDEX_TAKER_FEE : 0),
     )
 
-    for(var i=0; i<promises.length; i++)
-    {
-        for(var x=0; x<promises.length; x++)
+
+    
+
+    return Promise.all(promises).then(results => {
+
+      var Arr = []
+
+      for(var i=0; i<results.length; i++)
+      {
+        for(var x=0; x<results.length; x++)
         {
-           
+            if(results[i].exchangeName !== results[x].exchangeName && (results[i].avgPrice - results[x].avgPrice)>0)
+            {
+                Arr.push({"transction": `from ${results[x].exchangeName} to ${results[i].exchangeName} at ${results[i].avgPrice - results[x].avgPrice} difference \n` })
+            }
+            else if(results[i].exchangeName !== results[x].exchangeName && (results[i].avgPrice - results[x].avgPrice)<0)
+              {
+                Arr.push({"transction": `from ${results[i].exchangeName} to ${results[x].exchangeName} at ${results[i].avgPrice - results[x].avgPrice} difference \n` })
+              }
+              else
+                {
+                  Arr.push({"error" : "some shit went down! \n"})
+                }
         }
-    }
+      }
 
+      return Arr
 
-    return Promise.all(promises).then(results =>  {
-          const ExchangesAndPrices = results.map(result => [result.exchangeName, result.avgPrice] )
-          
-          return ExchangesAndPrices 
-        })
+    })
+
+    // .then(results =>  {
+    //       const ExchangesAndPrices = results.map(result => {
+
+    //         result = {"ExchName": result.exchangeName, "AvgPrice":result.avgPrice}
+
+    //         return result
+    //       });
+
+    //       return ExchangesAndPrices 
+    //     })
     
   },
   AirSwap,

@@ -24,18 +24,18 @@ module.exports = {
     return 0
   },
   pipeResultsToCommandLine(sortedResults, symbol, amount, direction) {
-    const bestPriceDex = sortedResults[0]
-    const [bestDexName, bestDexData] = Object.entries(bestPriceDex)[0]
-    if (bestDexData.totalPrice) {
-      console.log('✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨')
-      console.log(
-        '\x1b[32m%s\x1b[0m',
-        `You can find the best price on ${bestDexName}! ${direction} ${amount} @ ${bestDexData.avgPrice} ${symbol}/ETH`,
-      )
-      console.log('✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨')
-    } else {
-      console.log('No good orders found! 😢')
-    }
+    // const bestPriceDex = sortedResults[0]
+    // const [bestDexName, bestDexData] = Object.entries(bestPriceDex)[0]
+    // if (bestDexData.totalPrice) {
+    //   console.log('✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨')
+    //   console.log(
+    //     '\x1b[32m%s\x1b[0m',
+    //     `You can find the best price on ${bestDexName}! ${direction} ${amount} @ ${bestDexData.avgPrice} ${symbol}/ETH`,
+    //   )
+    //   console.log('✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨')
+    // } else {
+    //   console.log('No good orders found! 😢')
+    // }
     console.log(sortedResults)
   },
   applyFeeToResult(result, fee, isSell) {
