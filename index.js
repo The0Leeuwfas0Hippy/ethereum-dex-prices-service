@@ -60,15 +60,24 @@ module.exports = {
         {
             if(results[i].exchangeName !== results[x].exchangeName && (results[i].avgPrice - results[x].avgPrice)>0)
             {
-                Arr.push({"transction": `from ${results[x].exchangeName} to ${results[i].exchangeName} at ${results[i].avgPrice - results[x].avgPrice} difference \n` })
+                Arr.push({"exch1": `${results[x].exchangeName}`, 
+                          "exch1 Price" : `${results[x].avgPrice}`,
+                          "exch2": `${results[i].exchangeName}`,
+                          "exch2 Price" : `${results[i].avgPrice}`,
+                          "transction": `from ${results[x].exchangeName} to ${results[i].exchangeName} at ${results[i].avgPrice - results[x].avgPrice} difference ` } )
             }
             else if(results[i].exchangeName !== results[x].exchangeName && (results[i].avgPrice - results[x].avgPrice)<0)
               {
-                Arr.push({"transction": `from ${results[i].exchangeName} to ${results[x].exchangeName} at ${results[i].avgPrice - results[x].avgPrice} difference \n` })
+                Arr.push({
+                         "exch1": `${results[x].exchangeName}`, 
+                         "exch1 Price" : `${results[x].avgPrice}`,
+                         "exch2": `${results[i].exchangeName}`,
+                        "exch2 Price" : `${results[i].avgPrice}`,
+                         "transction": `from ${results[i].exchangeName} to ${results[x].exchangeName} at ${results[i].avgPrice - results[x].avgPrice} difference ` } )
               }
               else
                 {
-                  Arr.push({"error" : "some shit went down! \n"})
+                  Arr.push({"error" : "some shit went down! " })
                 }
         }
       }
