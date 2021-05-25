@@ -12,7 +12,7 @@
     "trading"
   ],
   "main": "index.js",
-  "author": "Graham Perich <g@perich.dev>",
+  "author": "Moifadi Maleswene <moifadimaleswene@gmail.com>",
   "license": "MIT",
   "scripts": {
     "search": "node entrypoints/cli.js",
