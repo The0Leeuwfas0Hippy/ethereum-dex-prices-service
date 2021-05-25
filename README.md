@@ -137,7 +137,7 @@ You should then see:
 Now, make an HTTP request:
 
 ```sh
-curl http://localhost:1337/sell\?symbol\=DAI\&amount\=500
+curl  
 ```
 
 ## Commands

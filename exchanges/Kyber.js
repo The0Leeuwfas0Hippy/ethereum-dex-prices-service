@@ -69,9 +69,7 @@ module.exports = class Kyber {
         throw new Error(`${symbol} is not available on ${this.name}`)
       }
 
-      const [rate] = isSell
-        ? await this.getSellRate(tokenObj.id, desiredAmount)
-        : await this.getBuyRate(tokenObj.id, desiredAmount)
+      const [rate] = isSell ? await this.getSellRate(tokenObj.id, desiredAmount) : await this.getBuyRate(tokenObj.id, desiredAmount)
       const { src_qty, dst_qty } = rate // eslint-disable-line camelcase
       const [sourceQuantity] = src_qty // eslint-disable-line camelcase
       const [destinationQuantity] = dst_qty // eslint-disable-line camelcase

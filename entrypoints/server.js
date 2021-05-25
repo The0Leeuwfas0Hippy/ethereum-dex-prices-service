@@ -20,7 +20,7 @@ app.get('/buy', (req, res) => {
 
   main(symbol.toUpperCase(), parseFloat(amount), 'BUY', decimals || null)
   .then(sortedResponses => {
-  //  console.log(sortedResponses)
+   console.log(sortedResponses)
     res.status(200).send(sortedResponses) 
   })
 })

@@ -59,7 +59,7 @@ module.exports = class Uniswap {
   }
 
   // compute the average token price based on DEX liquidity and desired token amount
-  async computePrice(symbol, desiredAmount, isSell) {
+  async computePrice(symbol, desiredAmount) {
     let result = {}
     try {
       const { addr, decimals } = await tokenSymbolResolver(symbol)
@@ -88,25 +88,31 @@ module.exports = class Uniswap {
       if (parseFloat(ethAmount) === 0 || parseFloat(tokenAmount) === 0) {
         throw new Error(`no liquidity available for ${symbol}`)
       }
-      let totalPrice = null
-      if (isSell) {
-        totalPrice = Uniswap.getSellRate(desiredAmount, tokenAmount, ethAmount)
-      } else {
-        totalPrice = Uniswap.getBuyRate(desiredAmount, ethAmount, tokenAmount)
-      }
+      // let totalPrice = null,
+        let totalSellPrice = Uniswap.getSellRate(desiredAmount, tokenAmount, ethAmount), //sell price of Token x against ether
+          totalBuyPrice = Uniswap.getSellRate(desiredAmount, tokenAmount, ethAmount) //Buy price of Token x against ether
 
-      if (totalPrice <= 0) {
+      // if (isSell) {
+      //   totalPrice = Uniswap.getSellRate(desiredAmount, tokenAmount, ethAmount)
+      // } else {
+      //   totalPrice = Uniswap.getBuyRate(desiredAmount, ethAmount, tokenAmount)
+      // }
+
+      if (totalSellPrice <= 0 || totalBuyPrice <= 0) {
         throw new Error(`not enough liquidity. only ${tokenAmount} ${symbol} available and ${ethAmount} ETH`)
       }
 
-      const avgPrice = totalPrice / desiredAmount
+      const avgBuyPrice = totalBuyPrice / desiredAmount, 
+            avgSellPrice = totalSellPrice / desiredAmount
 
       result = {
         exchangeName: this.name,
-        totalPrice,
+        totalBuyPrice,
+        totalSellPrice,
+        avgBuyPrice,
+        avgSellPrice,
         tokenAmount: desiredAmount,
         tokenSymbol: symbol,
-        avgPrice,
         timestamp: Date.now(),
         error: null,
       }
