@@ -69,21 +69,27 @@ module.exports = class Kyber {
         throw new Error(`${symbol} is not available on ${this.name}`)
       }
 
-      const [rate] = isSell ? await this.getSellRate(tokenObj.id, desiredAmount) : await this.getBuyRate(tokenObj.id, desiredAmount)
+      const [rate] = await this.getSellRate(tokenObj.id, desiredAmount) 
+      const [BuyRate] = await this.getBuyRate(tokenObj.id, desiredAmount)
       const { src_qty, dst_qty } = rate // eslint-disable-line camelcase
+      const { Buy_src_qty, Buy_dst_qty } = Buyrate
       const [sourceQuantity] = src_qty // eslint-disable-line camelcase
       const [destinationQuantity] = dst_qty // eslint-disable-line camelcase
-      const avgPrice = isSell ? destinationQuantity / sourceQuantity : sourceQuantity / destinationQuantity
+      // const avgPrice = isSell ? destinationQuantity / sourceQuantity : sourceQuantity / destinationQuantity
+      const avgSellPrice = destinationQuantity / sourceQuantity
+      const avgBuyPrice = sourceQuantity / destinationQuantity
 
       result = {
         exchangeName: this.name,
-        totalPrice: isSell ? destinationQuantity : sourceQuantity,
+        totalBuyPrice:  sourceQuantity,
+        totalSellPrice: destinationQuantity,
+        avgBuyPrice,
+        avgSellPrice,
         tokenAmount: isSell ? sourceQuantity : destinationQuantity,
         tokenSymbol: symbol,
-        avgPrice,
         timestamp: Date.now(),
         error: null,
-      }
+      } 
     } catch (e) {
       result = {
         exchangeName: this.name,
