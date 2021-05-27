@@ -25,26 +25,26 @@ module.exports = {
     }
     
     const dexes = [
-      new AirSwap(),
-      new Bancor(decimals),
-      new BambooRelay(),
-      new DDEX(),
-      new Eth2Dai(),
-      new Ethfinex(),
-      new Forkdelta(),
-      new IDEX(),
+      // new AirSwap(),
+      // new Bancor(decimals),
+      // new BambooRelay(),
+      // new DDEX(),
+      // new Eth2Dai(),
+      // new Ethfinex(),
+      // new Forkdelta(),
+      // new IDEX(),
       new Kyber(),
-      new RadarRelay(),
-      new SaturnNetwork('eth'),
+      // new RadarRelay(),
+      // new SaturnNetwork('eth'),
       new Uniswap(),
-      new Switcheo(),
+      // new Switcheo(),
     ]
 
     
     var Tokens = ["DAI", "USDT"], Sell_Buy = ["SELL", "BUY"], Exch_Pairs = dexes
 
     const promises = dexes.map(dex =>   
-      dex.computePrice(symbol, amount, direction === 'SELL', dex.name === 'DDEX' ? DDEX_TAKER_FEE : 0),
+      dex.computePrice(symbol, amount, dex.name === 'DDEX' ? DDEX_TAKER_FEE : 0),
     )
 
 
@@ -58,27 +58,46 @@ module.exports = {
       {
         for(var x=0; x<results.length; x++)
         {
-            if(results[i].exchangeName !== results[x].exchangeName && (results[i].avgPrice - results[x].avgPrice)>0)
+            if(results[i].exchangeName !== results[x].exchangeName)
             {
-                Arr.push({"exch1": `${results[x].exchangeName}`, 
-                          "exch1 Price" : `${results[x].avgPrice}`,
-                          "exch2": `${results[i].exchangeName}`,
-                          "exch2 Price" : `${results[i].avgPrice}`,
-                          "transction": `from ${results[x].exchangeName} to ${results[i].exchangeName} at ${results[i].avgPrice - results[x].avgPrice} difference ` } )
+                const exch1BuyPrice = results[x].avgBuyPrice,
+                      exch1SellPrice = results[x].avgSellPrice,
+                      exch2BuyPrice = results[i].avgBuyPrice,
+                      exch2SellPrice = results[i].avgSellPrice
+
+                //Spread = exch1SellPrice - exch2BuyPrice [Buy @ exch2 and Sell @ exch1]
+                const Spread = exch1SellPrice - exch2BuyPrice
+                    var tx_message 
+
+                      if(Spread > 0)
+                      {
+                        tx_message  =`buy from ${results[i].exchangeName} and sell to ${results[x].exchangeName}`
+                      }
+                      else
+                          {
+                            tx_message = `Trade won't be successful - Spread = ${Spread}`
+                          }
+
+                Arr.push({"exches": `${results[x].exchangeName} and ${results[i].exchangeName}`, 
+                           exch1BuyPrice,
+                           exch1SellPrice,
+                           exch2BuyPrice,
+                           exch2SellPrice,
+                           tx_message} )
             }
-            else if(results[i].exchangeName !== results[x].exchangeName && (results[i].avgPrice - results[x].avgPrice)<0)
-              {
-                Arr.push({
-                         "exch1": `${results[x].exchangeName}`, 
-                         "exch1 Price" : `${results[x].avgPrice}`,
-                         "exch2": `${results[i].exchangeName}`,
-                        "exch2 Price" : `${results[i].avgPrice}`,
-                         "transction": `from ${results[i].exchangeName} to ${results[x].exchangeName} at ${results[i].avgPrice - results[x].avgPrice} difference ` } )
-              }
-              else
-                {
-                  Arr.push({"error" : "some shit went down! " })
-                }
+            // else if(results[i].exchangeName !== results[x].exchangeName && (results[i].avgPrice - results[x].avgPrice)<0)
+            //   {
+            //     Arr.push({
+            //              "exch1": `${results[x].exchangeName}`, 
+            //              "exch1 Price" : `${results[x].avgPrice}`,
+            //              "exch2": `${results[i].exchangeName}`,
+            //             "exch2 Price" : `${results[i].avgPrice}`,
+            //              "transction": `from ${results[i].exchangeName} to ${results[x].exchangeName} at ${results[i].avgPrice - results[x].avgPrice} difference ` } )
+            //   }
+            //   else
+            //     {
+            //       Arr.push({"error" : "some shit went down! " })
+            //     }
         }
       }
 

@@ -59,7 +59,7 @@ module.exports = class Kyber {
   }
 
   // compute the average token price based on DEX liquidity and desired token amount
-  async computePrice(symbol, desiredAmount, isSell) {
+  async computePrice(symbol, desiredAmount) {
     let result = {}
     try {
       const currencies = await this.getCurrencies()
@@ -72,20 +72,23 @@ module.exports = class Kyber {
       const [rate] = await this.getSellRate(tokenObj.id, desiredAmount) 
       const [BuyRate] = await this.getBuyRate(tokenObj.id, desiredAmount)
       const { src_qty, dst_qty } = rate // eslint-disable-line camelcase
-      const { Buy_src_qty, Buy_dst_qty } = Buyrate
+      const Buy_Price = { Buy_src_qty, Buy_dst_qty } = BuyRate
       const [sourceQuantity] = src_qty // eslint-disable-line camelcase
+      const [buySourceQuantity] = Buy_Price.Buy_src_qty
       const [destinationQuantity] = dst_qty // eslint-disable-line camelcase
+      const [buyDestinationQuantity] = Buy_Price.Buy_dst_qty
       // const avgPrice = isSell ? destinationQuantity / sourceQuantity : sourceQuantity / destinationQuantity
       const avgSellPrice = destinationQuantity / sourceQuantity
-      const avgBuyPrice = sourceQuantity / destinationQuantity
+      const avgBuyPrice = buySourceQuantity / buyDestinationQuantity
 
       result = {
         exchangeName: this.name,
-        totalBuyPrice:  sourceQuantity,
+        totalBuyPrice:  buySourceQuantity,
         totalSellPrice: destinationQuantity,
         avgBuyPrice,
         avgSellPrice,
-        tokenAmount: isSell ? sourceQuantity : destinationQuantity,
+        tokenAmount_Sell: sourceQuantity,
+        tokenAmount_Buy : buyDestinationQuantity,
         tokenSymbol: symbol,
         timestamp: Date.now(),
         error: null,
