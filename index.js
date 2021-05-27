@@ -26,7 +26,7 @@ module.exports = {
     
     const dexes = [
       // new AirSwap(),
-      // new Bancor(decimals),
+      new Bancor(decimals),
       // new BambooRelay(),
       // new DDEX(),
       // new Eth2Dai(),
@@ -40,8 +40,6 @@ module.exports = {
       // new Switcheo(),
     ]
 
-    
-    var Tokens = ["DAI", "USDT"], Sell_Buy = ["SELL", "BUY"], Exch_Pairs = dexes
 
     const promises = dexes.map(dex =>   
       dex.computePrice(symbol, amount, dex.name === 'DDEX' ? DDEX_TAKER_FEE : 0),

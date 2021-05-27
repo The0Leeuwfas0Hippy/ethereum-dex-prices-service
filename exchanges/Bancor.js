@@ -116,7 +116,7 @@ module.exports = class Bancor {
   }
 
   // compute the average token price based on DEX liquidity and desired token amount
-  async computePrice(symbol, desiredAmount, isSell) {
+  async computePrice(symbol, desiredAmount) {
     let result = {}
     try {
       const currencies = await this.getCurrencies()
@@ -135,17 +135,19 @@ module.exports = class Bancor {
       this.tokenDecimals = String(tokenDetails.details[0].decimals)
 
       const tokenId = tokenObj.id
-      const totalPrice = isSell
-        ? await this.getSellRate(tokenId, desiredAmount)
-        : await this.getBuyRate(tokenId, desiredAmount)
-      const avgPrice = totalPrice / desiredAmount
+      const totalSellPrice = await this.getSellRate(tokenId, desiredAmount)
+      const totalBuyPrice = await this.getBuyRate(tokenId, desiredAmount) 
+      const avgBuyPrice = totalBuyPrice / desiredAmount
+      const avgSellPrice = totalSellPrice / desiredAmount
 
       result = {
         exchangeName: this.name,
-        totalPrice: parseFloat(totalPrice),
+        totalBuyPrice: parseFloat(totalBuyPrice),
+        totalSellPrice: parseFloat(totalSellPrice),
+        avgBuyPrice,
+        avgSellPrice,
         tokenAmount: parseFloat(desiredAmount),
         tokenSymbol: symbol,
-        avgPrice,
         timestamp: Date.now(),
         error: null,
       }
