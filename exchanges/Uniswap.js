@@ -90,7 +90,7 @@ module.exports = class Uniswap {
       }
       // let totalPrice = null,
         let totalSellPrice = Uniswap.getSellRate(desiredAmount, tokenAmount, ethAmount), //sell price of Token x against ether
-          totalBuyPrice = Uniswap.getSellRate(desiredAmount, tokenAmount, ethAmount) //Buy price of Token x against ether
+          totalBuyPrice = Uniswap.getBuyRate(desiredAmount, ethAmount, tokenAmount) //Buy price of Token x against ether
 
       // if (isSell) {
       //   totalPrice = Uniswap.getSellRate(desiredAmount, tokenAmount, ethAmount)

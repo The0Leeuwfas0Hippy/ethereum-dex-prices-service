@@ -79,10 +79,10 @@ module.exports = {
                           }
 
                 Arr.push({"exches": `${results[x].exchangeName} and ${results[i].exchangeName}`, 
-                           exch1BuyPrice,
-                           exch1SellPrice,
-                           exch2BuyPrice,
-                           exch2SellPrice,
+                           "exch1BuyPrice": `${results[x].exchangeName} buy Price = ${exch1BuyPrice}`,
+                           "exch1SellPrice" : `${results[x].exchangeName} Sell Price = ${exch1SellPrice}`,
+                           "exch2BuyPrice" : `${results[i].exchangeName} Buy Price = ${exch2BuyPrice}`,
+                           "exch2SellPrice" : `${results[i].exchangeName} Sell Price = ${exch2SellPrice}`,
                            tx_message} )
             }
             // else if(results[i].exchangeName !== results[x].exchangeName && (results[i].avgPrice - results[x].avgPrice)<0)
