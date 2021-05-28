@@ -33,7 +33,7 @@ module.exports = {
       // new Ethfinex(),
       // new Forkdelta(),
       // new IDEX(),
-      // new Kyber(),
+      // new Kyber(), 
       // new RadarRelay(),
       // new SaturnNetwork('eth'),
       new Uniswap(),
@@ -49,7 +49,7 @@ module.exports = {
     return Promise.all(promises).then(results => {
 
       var Arr = []
-
+// while RunApp = true; run below operation
       for(var i=0; i<results.length; i++)
       {
         for(var x=0; x<results.length; x++)
@@ -65,9 +65,10 @@ module.exports = {
                 const Spread = exch1SellPrice - exch2BuyPrice
                     var tx_message 
 
+                    //replace if(Spread>0) with While(Spread>0){execute Flash-Arb}
                       if(Spread > 0)
                       {
-                        tx_message  =`buy from ${results[i].exchangeName} and sell to ${results[x].exchangeName}`
+                        tx_message  =`buy from ${results[i].exchangeName} and sell to ${results[x].exchangeName} @ Spread = ${Spread}`
                       }
                       else
                           {
