@@ -33,7 +33,7 @@ module.exports = {
       // new Ethfinex(),
       // new Forkdelta(),
       // new IDEX(),
-      new Kyber(),
+      // new Kyber(),
       // new RadarRelay(),
       // new SaturnNetwork('eth'),
       new Uniswap(),
