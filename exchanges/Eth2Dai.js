@@ -11,7 +11,7 @@ module.exports = class Eth2Dai {
     this.name = 'Eth2Dai'
   }
 
-  async computePrice(symbol, desiredAmount, isSell) {
+  async computePrice(symbol, desiredAmount) {
     let result = {}
     try {
       // Even though the smart contract that powers ETH2DAI is totally open and allows trading on
@@ -24,19 +24,30 @@ module.exports = class Eth2Dai {
       const { addr, decimals } = await tokenSymbolResolver(symbol)
 
       const desiredAmountInWei = utils.parseUnits(desiredAmount.toString(), decimals)
-      const totalPriceInWei = isSell
-        ? await this.exchangeContract.getBuyAmount(WETH_ADDRESS, addr, desiredAmountInWei)
-        : await this.exchangeContract.getPayAmount(WETH_ADDRESS, addr, desiredAmountInWei)
 
-      const totalPrice = parseFloat(utils.formatUnits(utils.bigNumberify(totalPriceInWei.toString()), WETH_DECIMALS))
-      const avgPrice = totalPrice / desiredAmount
+      // const totalPriceInWei = isSell ? await this.exchangeContract.getBuyAmount(WETH_ADDRESS, addr, desiredAmountInWei)
+      //   : await this.exchangeContract.getPayAmount(WETH_ADDRESS, addr, desiredAmountInWei)
+
+      // const totalPrice = parseFloat(utils.formatUnits(utils.bigNumberify(totalPriceInWei.toString()), WETH_DECIMALS))
+
+      const BuyPrice = await this.exchangeContract.getPayAmount(WETH_ADDRESS, addr, desiredAmountInWei)
+      const totalBuyPrice = parseFloat(utils.formatUnits(utils.bigNumberify(BuyPrice.toString()), WETH_DECIMALS))
+
+      const SellPrice = await this.exchangeContract.getBuyAmount(WETH_ADDRESS, addr, desiredAmountInWei)
+      const totalSellPrice = parseFloat(utils.formatUnits(utils.bigNumberify(SellPrice.toString()), WETH_DECIMALS))
+
+      // const avgPrice = totalPrice / desiredAmount
+      const avgBuyPrice = totalBuyPrice/desiredAmount
+      const avgSellPrice = totalSellPrice/desiredAmount
 
       result = {
         exchangeName: this.name,
-        totalPrice,
+        totalBuyPrice,
+        totalSellPrice,
+        avgBuyPrice,
+        avgSellPrice,
         tokenAmount: desiredAmount,
         tokenSymbol: symbol,
-        avgPrice,
         timestamp: Date.now(),
         error: null,
       }

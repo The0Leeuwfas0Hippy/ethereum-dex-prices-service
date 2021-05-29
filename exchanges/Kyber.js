@@ -69,26 +69,30 @@ module.exports = class Kyber {
         throw new Error(`${symbol} is not available on ${this.name}`)
       }
 
-      const [rate] =  this.getSellRate(tokenObj.id, desiredAmount) 
-      const [BuyRate] =  this.getBuyRate(tokenObj.id, desiredAmount)
-      const { src_qty, dst_qty } = rate // eslint-disable-line camelcase
-      const Buy_Price = { src_qty, dst_qty } = BuyRate
-      const [sourceQuantity] = src_qty // eslint-disable-line camelcase
-      const [buySourceQuantity] = Buy_Price.src_qty
-      const [destinationQuantity] = dst_qty // eslint-disable-line camelcase
-      const [buyDestinationQuantity] = Buy_Price.dst_qty
+      const sell_rate =  [rate] =  this.getSellRate(tokenObj.id, desiredAmount) 
+      const buy_rate = [rate] =  this.getBuyRate(tokenObj.id, desiredAmount)
+
+      const Sell_Price = { src_qty, dst_qty } = sell_rate.rate // eslint-disable-line camelcase
+      const Buy_Price = { src_qty, dst_qty } = buy_rate.rate
+
+      const sellSource = [sourceQuantity] = Sell_Price.src_qty // eslint-disable-line camelcase
+      const buySource = [sourceQuantity] = Buy_Price.src_qty
+
+      const sellDestination = [destinationQuantity] = Sell_Price.dst_qty // eslint-disable-line camelcase
+      const buyDestination = [destinationQuantity] = Buy_Price.dst_qty
+
       // const avgPrice = isSell ? destinationQuantity / sourceQuantity : sourceQuantity / destinationQuantity
-      const avgSellPrice = destinationQuantity / sourceQuantity
-      const avgBuyPrice = buySourceQuantity / buyDestinationQuantity
+      const avgSellPrice = sellDestination.destinationQuantity / sellSource
+      const avgBuyPrice = buySource.destinationQuantity / buyDestination
 
       result = {
         exchangeName: this.name,
-        totalBuyPrice:  buySourceQuantity,
-        totalSellPrice: destinationQuantity,
+        totalBuyPrice:  buySource,
+        totalSellPrice: sellDestination,
         avgBuyPrice,
         avgSellPrice,
-        tokenAmount_Sell: sourceQuantity,
-        tokenAmount_Buy : buyDestinationQuantity,
+        tokenAmount_Sell: sellSource,
+        tokenAmount_Buy : buyDestination,
         tokenSymbol: symbol,
         timestamp: Date.now(),
         error: null,

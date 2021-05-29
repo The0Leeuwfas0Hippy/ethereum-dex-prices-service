@@ -24,6 +24,7 @@ module.exports = class AirSwap {
     try {
       const { addr, decimals } = await tokenSymbolResolver(symbol)
       const signerToken = isSell ? WETH_ADDRESS : addr
+      const buy_SignerToken = addr
       const senderToken = isSell ? addr : WETH_ADDRESS
       const desiredAmountAtomic = utils.parseUnits(desiredAmount.toString(), decimals)
 

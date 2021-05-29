@@ -26,14 +26,14 @@ module.exports = {
     
     const dexes = [
       // new AirSwap(),
-      new Bancor(decimals),
+      // new Bancor(decimals),
       // new BambooRelay(),
       // new DDEX(),
       // new Eth2Dai(),
       // new Ethfinex(),
       // new Forkdelta(),
       // new IDEX(),
-      // new Kyber(), 
+      new Kyber(), 
       // new RadarRelay(),
       // new SaturnNetwork('eth'),
       new Uniswap(),
