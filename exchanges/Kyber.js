@@ -72,18 +72,18 @@ module.exports = class Kyber {
       const sell_rate =  [rate] =  this.getSellRate(tokenObj.id, desiredAmount) 
       const buy_rate = [rate] =  this.getBuyRate(tokenObj.id, desiredAmount)
 
-      const Sell_Price = { src_qty, dst_qty } = sell_rate.rate // eslint-disable-line camelcase
-      const Buy_Price = { src_qty, dst_qty } = buy_rate.rate
+      const Sell_Price = { src_qty, dst_qty } = sell_rate 
+      const Buy_Price = { src_qty, dst_qty } = buy_rate
 
-      const sellSource = [sourceQuantity] = Sell_Price.src_qty // eslint-disable-line camelcase
+      const sellSource = [sourceQuantity] = Sell_Price.src_qty 
       const buySource = [sourceQuantity] = Buy_Price.src_qty
 
-      const sellDestination = [destinationQuantity] = Sell_Price.dst_qty // eslint-disable-line camelcase
+      const sellDestination = [destinationQuantity] = Sell_Price.dst_qty 
       const buyDestination = [destinationQuantity] = Buy_Price.dst_qty
 
       // const avgPrice = isSell ? destinationQuantity / sourceQuantity : sourceQuantity / destinationQuantity
-      const avgSellPrice = sellDestination.destinationQuantity / sellSource
-      const avgBuyPrice = buySource.destinationQuantity / buyDestination
+      const avgSellPrice = sellDestination / sellSource
+      const avgBuyPrice = buySource / buyDestination
 
       result = {
         exchangeName: this.name,

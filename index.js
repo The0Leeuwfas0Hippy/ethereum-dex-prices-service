@@ -13,6 +13,7 @@ const Uniswap = require('./exchanges/Uniswap.js')
 const Switcheo = require('./exchanges/Switcheo.js')
 const { sortBids, sortAsks } = require('./helpers')
 const { DDEX_TAKER_FEE } = require('./constants')
+// const Web3 = require('web3')
 
 // given a token symbol and amount, return offers from all dexes
 // sorted descending by best price
@@ -24,16 +25,18 @@ module.exports = {
       throw new Error(`must specify BUY or SELL. you specified "${direction}"`)
     }
     
+    // let web3 = new Web3('ws://localhost:8080')
+    
     const dexes = [
       // new AirSwap(),
-      // new Bancor(decimals),
+      new Bancor(decimals),
       // new BambooRelay(),
       // new DDEX(),
-      // new Eth2Dai(),
+      new Eth2Dai(),
       // new Ethfinex(),
       // new Forkdelta(),
       // new IDEX(),
-      new Kyber(), 
+      // new Kyber(), 
       // new RadarRelay(),
       // new SaturnNetwork('eth'),
       new Uniswap(),
@@ -48,7 +51,7 @@ module.exports = {
 
     return Promise.all(promises).then(results => {
 
-      var Arr = []
+      var ArrayOfExchDiffs = []//, GasPrize = web3.eth.getGasPrice().then(result => {return result})
 // while RunApp = true; run below operation
       for(var i=0; i<results.length; i++)
       {
@@ -72,21 +75,22 @@ module.exports = {
                       }
                       else
                           {
-                            tx_message = `Trade won't be successful - Spread = ${Spread}`
+                            tx_message = `Spread = ${Spread} - Trade UNSUCCESSFUL!!!`
                           }
 
-                Arr.push({"exches": `${results[x].exchangeName} and ${results[i].exchangeName}`, 
+                 ArrayOfExchDiffs.push({"tx direction": ` from ${results[x].exchangeName} to ${results[i].exchangeName}`, 
                            "exch1BuyPrice": `${results[x].exchangeName} buy Price = ${exch1BuyPrice}`,
                            "exch1SellPrice" : `${results[x].exchangeName} Sell Price = ${exch1SellPrice}`,
                            "exch2BuyPrice" : `${results[i].exchangeName} Buy Price = ${exch2BuyPrice}`,
                            "exch2SellPrice" : `${results[i].exchangeName} Sell Price = ${exch2SellPrice}`,
-                           tx_message} )
+                           tx_message
+                           } )
             }
             
         }
       }
 
-      return Arr
+      return ArrayOfExchDiffs
 
     })
     

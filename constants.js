@@ -49,7 +49,7 @@ const UNISWAP_FACTORY_ABI = [
     payable: false,
     type: 'function',
     gas: 715,
-  },
+  }, 
   {
     name: 'getToken',
     outputs: [{ type: 'address', name: 'out' }],
