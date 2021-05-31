@@ -1,3 +1,4 @@
+require('dotenv').config()
 const AirSwap = require('./exchanges/AirSwap.js')
 const BambooRelay = require('./exchanges/BambooRelay.js')
 const Bancor = require('./exchanges/Bancor.js')
@@ -13,7 +14,7 @@ const Uniswap = require('./exchanges/Uniswap.js')
 const Switcheo = require('./exchanges/Switcheo.js')
 const { sortBids, sortAsks } = require('./helpers')
 const { DDEX_TAKER_FEE } = require('./constants')
-// const Web3 = require('web3')
+const Web3 = require('web3')
 
 // given a token symbol and amount, return offers from all dexes
 // sorted descending by best price
@@ -25,7 +26,7 @@ module.exports = {
       throw new Error(`must specify BUY or SELL. you specified "${direction}"`)
     }
     
-    // let web3 = new Web3('ws://localhost:8080')
+    var web3 = new Web3('ws://localhost:8080')
     
     const dexes = [
       // new AirSwap(),
