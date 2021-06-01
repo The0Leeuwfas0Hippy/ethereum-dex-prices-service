@@ -14,6 +14,7 @@ const Uniswap = require('./exchanges/Uniswap.js')
 const Switcheo = require('./exchanges/Switcheo.js')
 const { sortBids, sortAsks } = require('./helpers')
 const { DDEX_TAKER_FEE } = require('./constants')
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 const Web3 = require('web3')
 
 // given a token symbol and amount, return offers from all dexes
@@ -26,7 +27,7 @@ module.exports = {
       throw new Error(`must specify BUY or SELL. you specified "${direction}"`)
     }
     
-    var web3 = new Web3('ws://localhost:8080')
+    var web3 = new Web3(new HDWalletProvider())
     
     const dexes = [
       // new AirSwap(),

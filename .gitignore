@@ -10,3 +10,6 @@ coverage/
 
 # Local Dev Testing
 scratchpad.js
+
+#Private Shit
+.env
