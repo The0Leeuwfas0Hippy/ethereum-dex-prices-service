@@ -27,22 +27,33 @@ module.exports = {
       throw new Error(`must specify BUY or SELL. you specified "${direction}"`)
     }
     
-    var web3 = new Web3(new HDWalletProvider())
+    var web3 = new Web3(new HDWalletProvider(process.env.PRIVATE_KEY, process.env.RPC_URL))
+    // var web3 = new Web3(new Web3.providers.HttpProvider(process.env.RPC_URL))
+    // var web3 = new Web3('https://mainnet.infura.io/v3/f65faddcb26a434fbe94814951196f0e')
+
+    let promise = web3.eth.getGasPrice((err, gaz) => {
+
+        var gass
+        if(!err)
+        {
+          gass = gaz
+          // gass = web3.utils.fromWei(gaz, 'ether')
+        }else
+           {
+             gass = "ain't shit sweet!"
+           }
+  
+           return gass
+             
+              })
+    
+
     
     const dexes = [
       // new AirSwap(),
-      new Bancor(decimals),
-      // new BambooRelay(),
-      // new DDEX(),
-      new Eth2Dai(),
-      // new Ethfinex(),
-      // new Forkdelta(),
-      // new IDEX(),
-      // new Kyber(), 
-      // new RadarRelay(),
-      // new SaturnNetwork('eth'),
-      new Uniswap(),
-      // new Switcheo(),
+      new Bancor(decimals), // new BambooRelay(), // new DDEX(),
+      new Eth2Dai(), // new Ethfinex(), // new Forkdelta(), // new IDEX(), // new Kyber(), // new RadarRelay(), // new SaturnNetwork('eth'),
+      new Uniswap(), // new Switcheo(),
     ]
 
 
@@ -53,7 +64,8 @@ module.exports = {
 
     return Promise.all(promises).then(results => {
 
-      var ArrayOfExchDiffs = []//, GasPrize = web3.eth.getGasPrice().then(result => {return result})
+      var ArrayOfExchDiffs = []
+      
 // while RunApp = true; run below operation
       for(var i=0; i<results.length; i++)
       {
@@ -85,7 +97,9 @@ module.exports = {
                            "exch1SellPrice" : `${results[x].exchangeName} Sell Price = ${exch1SellPrice}`,
                            "exch2BuyPrice" : `${results[i].exchangeName} Buy Price = ${exch2BuyPrice}`,
                            "exch2SellPrice" : `${results[i].exchangeName} Sell Price = ${exch2SellPrice}`,
-                           tx_message
+                           tx_message,
+                           promise
+                          //  'Gas Price': `${Gaza} is gas price gwei`
                            } )
             }
             
