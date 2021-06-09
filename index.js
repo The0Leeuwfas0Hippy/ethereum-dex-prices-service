@@ -30,24 +30,6 @@ module.exports = {
     var web3 = new Web3(new HDWalletProvider(process.env.PRIVATE_KEY, process.env.RPC_URL))
     // var web3 = new Web3(new Web3.providers.HttpProvider(process.env.RPC_URL))
     // var web3 = new Web3('https://mainnet.infura.io/v3/f65faddcb26a434fbe94814951196f0e')
-
-    let promise = web3.eth.getGasPrice((err, gaz) => {
-
-        var gass
-        if(!err)
-        {
-          gass = gaz
-          // gass = web3.utils.fromWei(gaz, 'ether')
-        }else
-           {
-             gass = "ain't shit sweet!"
-           }
-  
-           return gass
-             
-              })
-    
-
     
     const dexes = [
       // new AirSwap(),
@@ -62,8 +44,11 @@ module.exports = {
     )
 
 
-    return Promise.all(promises).then(results => {
+    return web3.eth.getGasPrice().then(gasPrice => {
+      
+       theGasProm = Promise.all(promises).then(results => {
 
+      // var theGas = web3.eth.getGasPrice().then()
       var ArrayOfExchDiffs = []
       
 // while RunApp = true; run below operation
@@ -98,7 +83,7 @@ module.exports = {
                            "exch2BuyPrice" : `${results[i].exchangeName} Buy Price = ${exch2BuyPrice}`,
                            "exch2SellPrice" : `${results[i].exchangeName} Sell Price = ${exch2SellPrice}`,
                            tx_message,
-                           promise
+                           gasPrice
                           //  'Gas Price': `${Gaza} is gas price gwei`
                            } )
             }
@@ -108,6 +93,9 @@ module.exports = {
 
       return ArrayOfExchDiffs
 
+    })
+
+    return theGasProm
     })
     
   },
