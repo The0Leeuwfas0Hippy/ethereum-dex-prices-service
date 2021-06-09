@@ -45,57 +45,61 @@ module.exports = {
 
 
     return web3.eth.getGasPrice().then(gasPrice => {
-      
-       theGasProm = Promise.all(promises).then(results => {
 
-      // var theGas = web3.eth.getGasPrice().then()
-      var ArrayOfExchDiffs = []
-      
-// while RunApp = true; run below operation
-      for(var i=0; i<results.length; i++)
-      {
-        for(var x=0; x<results.length; x++)
+             return web3.utils.fromWei(gasPrice, 'ether')
+
+    }).then(GasInEth => {
+
+      theGasProm = Promise.all(promises).then(results => {
+
+        // var theGas = web3.eth.getGasPrice().then()
+        var ArrayOfExchDiffs = []
+        
+  // while RunApp = true; run below operation
+        for(var i=0; i<results.length; i++)
         {
-            if(results[i].exchangeName !== results[x].exchangeName)
-            {
-                const exch1BuyPrice = results[x].avgBuyPrice,
-                      exch1SellPrice = results[x].avgSellPrice,
-                      exch2BuyPrice = results[i].avgBuyPrice,
-                      exch2SellPrice = results[i].avgSellPrice
-
-                //Spread = exch1SellPrice - exch2BuyPrice [Buy @ exch2 and Sell @ exch1]
-                const Spread = exch1SellPrice - exch2BuyPrice
-                    var tx_message 
-
-                    //replace if(Spread>0) with While(Spread>0){execute Flash-Arb}
-                      if(Spread > 0)
-                      {
-                        tx_message  =`buy from ${results[i].exchangeName} and sell to ${results[x].exchangeName} @ Spread = ${Spread}`
-                      }
-                      else
-                          {
-                            tx_message = `Spread = ${Spread} - Trade UNSUCCESSFUL!!!`
-                          }
-
-                 ArrayOfExchDiffs.push({"tx direction": ` from ${results[x].exchangeName} to ${results[i].exchangeName}`, 
-                           "exch1BuyPrice": `${results[x].exchangeName} buy Price = ${exch1BuyPrice}`,
-                           "exch1SellPrice" : `${results[x].exchangeName} Sell Price = ${exch1SellPrice}`,
-                           "exch2BuyPrice" : `${results[i].exchangeName} Buy Price = ${exch2BuyPrice}`,
-                           "exch2SellPrice" : `${results[i].exchangeName} Sell Price = ${exch2SellPrice}`,
-                           tx_message,
-                           gasPrice
-                          //  'Gas Price': `${Gaza} is gas price gwei`
-                           } )
-            }
-            
+          for(var x=0; x<results.length; x++)
+          {
+              if(results[i].exchangeName !== results[x].exchangeName)
+              {
+                  const exch1BuyPrice = results[x].avgBuyPrice,
+                        exch1SellPrice = results[x].avgSellPrice,
+                        exch2BuyPrice = results[i].avgBuyPrice,
+                        exch2SellPrice = results[i].avgSellPrice
+  
+                  //Spread = exch1SellPrice - exch2BuyPrice [Buy @ exch2 and Sell @ exch1]
+                  const Spread = exch1SellPrice - exch2BuyPrice
+                      var tx_message 
+  
+                      //replace if(Spread>0) with While(Spread>0){execute Flash-Arb}
+                        if(Spread > 0)
+                        {
+                          tx_message  =`buy from ${results[i].exchangeName} and sell to ${results[x].exchangeName} @ Spread = ${Spread}`
+                        }
+                        else
+                            {
+                              tx_message = `Spread = ${Spread} - Trade UNSUCCESSFUL!!!`
+                            }
+  
+                   ArrayOfExchDiffs.push({"tx direction": ` from ${results[x].exchangeName} to ${results[i].exchangeName}`, 
+                             "exch1BuyPrice": `${results[x].exchangeName} buy Price = ${exch1BuyPrice}`,
+                             "exch1SellPrice" : `${results[x].exchangeName} Sell Price = ${exch1SellPrice}`,
+                             "exch2BuyPrice" : `${results[i].exchangeName} Buy Price = ${exch2BuyPrice}`,
+                             "exch2SellPrice" : `${results[i].exchangeName} Sell Price = ${exch2SellPrice}`,
+                             tx_message,
+                             GasInEth
+                            //  'Gas Price': `${Gaza} is gas price gwei`
+                             } )
+              }
+              
+          }
         }
-      }
+  
+        return ArrayOfExchDiffs
+  
+      })
 
-      return ArrayOfExchDiffs
-
-    })
-
-    return theGasProm
+      return theGasProm
     })
     
   },
