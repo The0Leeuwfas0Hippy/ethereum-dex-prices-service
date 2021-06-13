@@ -59,7 +59,7 @@ module.exports = class Kyber {
   }
 
   // compute the average token price based on DEX liquidity and desired token amount
-  async computePrice(symbol, desiredAmount) {
+  async computePrice(symbol, desiredAmount, isSell) {
     let result = {}
     try {
       const currencies = await this.getCurrencies()
@@ -69,34 +69,23 @@ module.exports = class Kyber {
         throw new Error(`${symbol} is not available on ${this.name}`)
       }
 
-      const sell_rate =  [rate] =  this.getSellRate(tokenObj.id, desiredAmount) 
-      const buy_rate = [rate] =  this.getBuyRate(tokenObj.id, desiredAmount)
-
-      const Sell_Price = { src_qty, dst_qty } = sell_rate 
-      const Buy_Price = { src_qty, dst_qty } = buy_rate
-
-      const sellSource = [sourceQuantity] = Sell_Price.src_qty 
-      const buySource = [sourceQuantity] = Buy_Price.src_qty
-
-      const sellDestination = [destinationQuantity] = Sell_Price.dst_qty 
-      const buyDestination = [destinationQuantity] = Buy_Price.dst_qty
-
-      // const avgPrice = isSell ? destinationQuantity / sourceQuantity : sourceQuantity / destinationQuantity
-      const avgSellPrice = sellDestination / sellSource
-      const avgBuyPrice = buySource / buyDestination
+      const [rate] = isSell
+        ? await this.getSellRate(tokenObj.id, desiredAmount)
+        : await this.getBuyRate(tokenObj.id, desiredAmount)
+      const { src_qty, dst_qty } = rate // eslint-disable-line camelcase
+      const [sourceQuantity] = src_qty // eslint-disable-line camelcase
+      const [destinationQuantity] = dst_qty // eslint-disable-line camelcase
+      const avgPrice = isSell ? destinationQuantity / sourceQuantity : sourceQuantity / destinationQuantity
 
       result = {
         exchangeName: this.name,
-        totalBuyPrice:  buySource,
-        totalSellPrice: sellDestination,
-        avgBuyPrice,
-        avgSellPrice,
-        tokenAmount_Sell: sellSource,
-        tokenAmount_Buy : buyDestination,
+        totalPrice: isSell ? destinationQuantity : sourceQuantity,
+        tokenAmount: isSell ? sourceQuantity : destinationQuantity,
         tokenSymbol: symbol,
+        avgPrice,
         timestamp: Date.now(),
         error: null,
-      } 
+      }
     } catch (e) {
       result = {
         exchangeName: this.name,
@@ -106,6 +95,6 @@ module.exports = class Kyber {
         tokenAmount: parseFloat(desiredAmount),
       }
     }
-    return result 
+    return { result }
   }
 }

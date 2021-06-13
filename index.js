@@ -16,6 +16,13 @@ const { sortBids, sortAsks } = require('./helpers')
 const { DDEX_TAKER_FEE } = require('./constants')
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 const Web3 = require('web3')
+const mnemonicPhrase = "sphere chef oven allow rifle close ribbon mask economy they shadow hour"
+let provider = new HDWalletProvider({
+  mnemonic: {
+    phrase: mnemonicPhrase
+  },
+  providerOrUrl: process.env.RPC_URL
+});
 
 // given a token symbol and amount, return offers from all dexes
 // sorted descending by best price
@@ -27,12 +34,12 @@ module.exports = {
       throw new Error(`must specify BUY or SELL. you specified "${direction}"`)
     }
     
-    var web3 = new Web3(new HDWalletProvider(process.env.PRIVATE_KEY, process.env.RPC_URL))
-    // var web3 = new Web3(new Web3.providers.HttpProvider(process.env.RPC_URL))
+    // var web3 = new Web3(new HDWalletProvider(process.env.PRIVATE_KEY, process.env.RPC_URL))
+    var web3 = new Web3(provider)
     // var web3 = new Web3('https://mainnet.infura.io/v3/f65faddcb26a434fbe94814951196f0e')
     
     const dexes = [
-      // new AirSwap(),
+      new AirSwap(),
       new Bancor(decimals), // new BambooRelay(), // new DDEX(),
       new Eth2Dai(), // new Ethfinex(), // new Forkdelta(), // new IDEX(), // new Kyber(), // new RadarRelay(), // new SaturnNetwork('eth'),
       new Uniswap(), // new Switcheo(),
@@ -102,6 +109,7 @@ module.exports = {
       return theGasProm
     })
     
+    provider.engine.stop();
   },
   AirSwap,
   BambooRelay,
