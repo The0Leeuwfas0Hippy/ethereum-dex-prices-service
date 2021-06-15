@@ -16,10 +16,9 @@ const { sortBids, sortAsks } = require('./helpers')
 const { DDEX_TAKER_FEE } = require('./constants')
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 const Web3 = require('web3')
-const mnemonicPhrase = "sphere chef oven allow rifle close ribbon mask economy they shadow hour"
 let provider = new HDWalletProvider({
   mnemonic: {
-    phrase: mnemonicPhrase
+    phrase: process.env.mnemonicPhrase
   },
   providerOrUrl: process.env.RPC_URL
 });

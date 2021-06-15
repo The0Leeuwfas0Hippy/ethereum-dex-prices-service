@@ -59,7 +59,7 @@ module.exports = class Kyber {
   }
 
   // compute the average token price based on DEX liquidity and desired token amount
-  async computePrice(symbol, desiredAmount, isSell) {
+  async computePrice(symbol, desiredAmount) {
     let result = {}
     try {
       const currencies = await this.getCurrencies()
@@ -69,18 +69,53 @@ module.exports = class Kyber {
         throw new Error(`${symbol} is not available on ${this.name}`)
       }
 
-      const [rate] = isSell
-        ? await this.getSellRate(tokenObj.id, desiredAmount)
-        : await this.getBuyRate(tokenObj.id, desiredAmount)
-      const { src_qty, dst_qty } = rate // eslint-disable-line camelcase
-      const [sourceQuantity] = src_qty // eslint-disable-line camelcase
-      const [destinationQuantity] = dst_qty // eslint-disable-line camelcase
-      const avgPrice = isSell ? destinationQuantity / sourceQuantity : sourceQuantity / destinationQuantity
+      let BuyRate = { src_qty, dst_qty },
+          SellRate = { src_qty, dst_qty }
+
+          //get AN ARRAY of object(s) containing
+      const [sell_rate] = await this.getSellRate(tokenObj.id, desiredAmount)
+      const [buy_rate] = await this.getBuyRate(tokenObj.id, desiredAmount)
+
+        // SellRate = sell_rate 
+        // BuyRate = buy_rate 
+
+        const [sell_sourceQuantity] = sell_rate.src_qty
+      const [sell_destinationQuantity] = sell_rate.dst_qty
+
+      const [buy_sourceQuantity] = buy_rate.src_qty
+      const [buy_destinationQuantity] = buy_rate.dst_qty
+
+      // const { src_qty, dst_qty } = rate
+
+      //get AN OBJECT KEY VALUE, which is AN ARRAY
+    // const {sell_src_qty, sell_dst_qty} = sell_rate
+      // const [SellRate_src_qty] = sell_rate.src_qty
+
+      // const {buy_src_qty, buy_dst_qty} = buy_rate
+      // const [BuyRate_dst_qty] = buy_rate.dst_qty
+
+      // const [sell_sourceQuantity] = sell_src_qty
+      // const [sell_destinationQuantity] = sell_dst_qty
+
+      // const [buy_sourceQuantity] = buy_src_qty
+      // const [buy_destinationQuantity] = buy_dst_qty
+      // const [sourceQuantity] = src_qty
+      // const [destinationQuantity] = dst_qty 
+
+      const totalBuyPrice = buy_sourceQuantity,
+      totalSellPrice = sell_destinationQuantity,
+      avgBuyPrice = buy_sourceQuantity/ buy_destinationQuantity,
+      avgSellPrice = sell_destinationQuantity / sell_sourceQuantity
+
+      // const avgPrice = isSell ? destinationQuantity / sourceQuantity : sourceQuantity / destinationQuantity
 
       result = {
         exchangeName: this.name,
-        totalPrice: isSell ? destinationQuantity : sourceQuantity,
-        tokenAmount: isSell ? sourceQuantity : destinationQuantity,
+        totalBuyPrice,
+        totalSellPrice,
+        avgBuyPrice,
+        avgSellPrice,
+        // tokenAmount: isSell ? sourceQuantity : destinationQuantity,
         tokenSymbol: symbol,
         avgPrice,
         timestamp: Date.now(),
@@ -95,6 +130,6 @@ module.exports = class Kyber {
         tokenAmount: parseFloat(desiredAmount),
       }
     }
-    return { result }
+    return result 
   }
 }
